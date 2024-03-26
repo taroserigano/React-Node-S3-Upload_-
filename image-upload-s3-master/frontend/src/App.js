@@ -21,19 +21,24 @@ function App() {
 
   const submit = async event => {
     event.preventDefault()
+
+    // receives image data (as path): res.send({imagePath: `/images/${result.Key}`})
     const result = await postImage({image: file, description})
+    // set the received image 	  
     setImages([result.image, ...images])
   }
 
   const fileSelected = event => {
     const file = event.target.files[0]
-		setFile(file)
-	}
+    setFile(file)
+  }
 
   return (
     <div className="App">
       <form onSubmit={submit}>
+	  // choose the file you wanna upload 
         <input onChange={fileSelected} type="file" accept="image/*"></input>
+	  // just type some description about the file 
         <input value={description} onChange={e => setDescription(e.target.value)} type="text"></input>
         <button type="submit">Submit</button>
       </form>
