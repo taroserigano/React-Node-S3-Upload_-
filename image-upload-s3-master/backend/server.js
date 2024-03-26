@@ -2,6 +2,9 @@ const express = require('express')
 
 const fs = require('fs')
 const util = require('util')
+
+// fs.link --> removes the file or link from the filesystem 
+// util.promisify --> enables the callback function to enable promise() 
 const unlinkFile = util.promisify(fs.unlink)
 
 const multer = require('multer')
@@ -16,6 +19,7 @@ app.get('/images/:key', (req, res) => {
   const key = req.params.key
   const readStream = getFileStream(key)
 
+  // returniing the image 
   readStream.pipe(res)
 })
 
@@ -27,8 +31,11 @@ app.post('/images', upload.single('image'), async (req, res) => {
   // resize 
 
   const result = await uploadFile(file)
+
+  // after upload, disconnect the file from filesystem 
   await unlinkFile(file.path)
   console.log(result)
+  
   const description = req.body.description
   res.send({imagePath: `/images/${result.Key}`})
 })
